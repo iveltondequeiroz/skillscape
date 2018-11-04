@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang=''>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+    <title>Skillscape</title>
+    <style>
+    body {
+        font-family: 'Raleway', sans-serif;
+        font-size: 40px;
+    }
+    
+    .node {
+        stroke: #fff;
+        stroke-width: 1.5px;
+    }
+    
+    .link {
+        fill: none;
+        stroke: #bbb;
+    }
+    
+    div.tooltip {
+        position: absolute;
+        text-align: center;
+        padding: 2px;
+        font: 12px sans-serif;
+        border: 0px;
+        border-radius: 8px;
+        pointer-events: none;
+    }
+    
+    .tooltip2 {
+        position: absolute;
+        z-index: 10;
+        background-color: rgba(255, 255, 255, 0.95);
+        border: 2px #B1B5B4 solid;
+        border-radius: 10px;
+        color: #52524E;
+        margin: 5px;
+        padding: 5px;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 13px;
+    }
+    
+    .button {
+        background-color: #888888;
+        border: none;
+        color: white;
+        padding: 10px 25px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+    
+    .graph1 {
+        opacity: 1;
+    }
+
+    #overlay {
+    padding: 50px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    filter:alpha(opacity=100);
+    -moz-opacity:1.0;
+    -khtml-opacity: 1.0;
+    opacity: 1.0;
+    z-index: 10000;
+	}
+    </style>
+    <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'></link>
+    <script type="text/javascript" src="json files/job_categories.js"></script>
+    <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+<script>
+var overlay;
+if(sessionStorage.authorized) {
+} else {
+	var checkPassword = function() {
+		if(document.getElementById("xpwd").value != "workforce") {
+			overlay.remove();
+			overlay = jQuery('<div id="overlay">Incorrect password. <input type="button" id="xtry" onClick="javascript:window.location.reload();" value="Try again?"/></div>');
+			overlay.appendTo(document.body);
+			document.getElementById("xtry").focus();
+		} else {
+			overlay.remove();
+			sessionStorage.authorized = true;
+		}
+	}
+	overlay = jQuery('<div id="overlay"><form onSubmit="javascript:checkPassword();return false;">Please enter password: <input id="xpwd" type="password"/><input type="submit" value="Submit"></form></div>');
+	overlay.appendTo(document.body);
+	document.getElementById("xpwd").focus();
+}
+</script>
+
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+
+            <img src="symbol_color.png" id='websiteTitleIMG' style="position:relative; float:left;"><span style='float:left'>&nbsp; Skillscape</span>
+
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cssmenu" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="cssmenu">
+                <ul class="nav navbar-nav">
+                <li class='active'><a href='index.html'>Home</a></li>
+                <li><a href='jobs_explore.html'>Explore Jobs</a></li>
+                <li><a href='jobs_compare.html'>Compare Jobs</a></li>
+                <li><a href='city_explore.html'>Explore Cities</a></li>
+                <li><a href='city_compare.html'>Compare Cities</a></li>
+                <li><a href='about.html'>About</a></li>
+                <li><a href='methods.html'>Methods</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+
+    <div class="graph1" id="graph1" style="position:absolute; width:100%; height:90%">
+
+        <div style=" position:absolute;width: 100%;top:35%;text-align:center;">
+        <b style="font-size:80px;">Skillscape</b>
+        <br>
+        <b><i style="font-size:30px;" >Unpacking skills inside jobs and cities</i></b>
+        </div>
+    </div>
+    <!--<div id="title_description" style="position:relative;width:20%; float:right; height:90%">
+      <div id="jobname" style="position:relative;right:5%;top:0px;"></div>
+      <div id="description" style="position:relative; right:5%; top:30px; font-size:16px"></div>
+    </div>-
+    <div style=" position:absolute;width: 100%;top:40%;text-align:center">
+        <b style="font-size:80px;">Skillscape</b>
+        <br>
+        <b><i style="font-size:30px;" >Unpacking skills inside jobs and cities</i></b>
+    </div>
+    -->
+    <script src="d3.v3.min.js"></script>
+    <script src="jquery.min.js"></script>
+    <script>
+    var width = $('#graph1').width(),
+        height = $('#graph1').height();
+
+    var xscale = d3.scale.linear().domain([-10, 21]).range([50, width])
+    var yscale = d3.scale.linear().domain([-1, 25]).range([50, height])
+
+
+    var force = d3.layout.force()
+        .linkDistance(3)
+        .linkStrength(5)
+        .size([width, height]);
+
+    var svg = d3.select("#graph1").append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .attr('opacity','0.3');
+
+    var prop = 0.05
+
+    function drawnetwork(graph) {
+        svg.selectAll(".node").remove()
+        svg.selectAll(".tooltip").remove()
+
+        var div = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+        //$('#jobname').text("Landscape Title")
+        //       .attr("text-align","left");
+        //$('#description').text("Landscape Description")
+        //        .attr("text-align","left");
+
+        var nodes = graph.nodes.slice(),
+            links = [],
+            bilinks = [];
+
+        graph.links.forEach(function(link) {
+            var s = nodes[link.source],
+                t = nodes[link.target],
+                i = {}; // intermediate node
+            nodes.push(i);
+            links.push({
+                source: s,
+                target: i
+            }, {
+                source: i,
+                target: t
+            });
+            bilinks.push([s, i, t]);
+        });
+
+        var link = svg.selectAll(".link")
+            .data(bilinks)
+            .enter().append("line")
+            .attr("class", "link")
+            .attr('x1', function(d) {
+                return xscale(+d[0].cx)
+            })
+            .attr('x2', function(d) {
+                return xscale(+d[2].cx)
+            })
+            .attr('y1', function(d) {
+                return yscale(+d[0].cy)
+            })
+            .attr('y2', function(d) {
+                return yscale(+d[2].cy)
+            });
+
+        var node = svg.selectAll(".node")
+            .data(graph.nodes)
+            .enter().append("circle")
+            .attr("class", "node")
+            .attr("r", function(d) {
+                return Math.min(30, +d.rca * 5 + 1);
+                //return generateradiussize(+d.rca);
+            })
+            .attr("cx", function(d) {
+                return xscale(+d.cx)
+            })
+            .attr("cy", function(d) {
+                return yscale(+d.cy)
+            })
+            //.attr("fixed", true)
+            .style("fill", function(d) {
+                return d.scolor
+            })
+
+        var textlist = ['Installation', 'Repairing', 'Night Vision', 'Fine Arts', 'Building and Construction', 'Medicine and Dentistry', 'Social', 'Design', 'Transportation', 'Science', 'Finger Dexterity', 'Foreign Language', 'Assisting and Caring for Others', 'Clerical', 'Relationships', 'Cooperation', 'Innovation', 'Achievement/Effort', 'Developing and Building Teams', 'Social Perceptiveness', 'Negotiation', 'Independence', 'Fluency of Ideas', 'Originality', 'Critical Thinking', 'Systems Analysis', 'Communicating with Persons Outside Organization', 'Coordination', 'Systems Analysis', 'Operating Vehicles, Mechanized Devices, or Equipment', 'Analytical Thinking', 'Mechanical', 'Science', 'Manual Dexterity'];
+
+        var textnode = svg.selectAll(".nodetext")
+            .data(graph.nodes)
+            .enter().append("text")
+            .attr("class", "nodetext")
+            .attr("x", function(d) {
+                return xscale(+d.cx)
+            })
+            .attr("y", function(d) {
+                return yscale(+d.cy)
+            })
+            .attr("font-size", '12px')
+            .attr("font-weight", "bold")
+            //.attr("text-anchor", "middle")
+            .text(function(d) {
+                return $.inArray(d.name, textlist) > -1 ? d.name : ""
+            })
+
+    };
+
+
+    /////////////////////////////////////////////////////////////////
+    function createRoundLegend() {
+        var g = svg.append("g");
+        var lengendcircle = g.append("g").attr("id", "lengendcircle").attr("transform", "translate(125," + (height - 80) + ")")
+        var text = ['high RCA', 'low RCA'];
+        var sizes = [6, 18, 30];
+        for (var i in sizes) {
+            lengendcircle.append("circle")
+                .attr("r", sizes[i])
+                .attr("cx", sizes[sizes.length - 1])
+                .attr("cy", 2 * sizes[sizes.length - 1] - sizes[i])
+                .attr('stroke', 'black')
+                .attr("fill", 'none');
+
+            lengendcircle.append("text")
+                .style("font-size", '12px')
+                .style("color", "black")
+                .attr("x", 75)
+                .attr("y", 50 * i)
+                .text(text[i]);
+
+            lengendcircle.append("line")
+                .attr("x1", sizes[sizes.length - 1])
+                .attr("y1", 0)
+                .attr("x2", 70)
+                .attr("y2", 0)
+                .attr('stroke', 'black')
+
+            lengendcircle.append("line")
+                .attr("x1", sizes[sizes.length - 1])
+                .attr("y1", 0 + 2 * (sizes[sizes.length - 1] - sizes[0]))
+                .attr("x2", 70)
+                .attr("y2", 0 + 2 * (sizes[sizes.length - 1] - sizes[0]))
+                .attr('stroke', 'black')
+
+
+        }
+    }
+
+    ///////////////////////////////////////////////////////////////////
+
+
+    d3.json("json files/11-1011.json", function(error, graph) {
+        drawnetwork(graph);
+    })
+
+    var legenddata = [{
+        "Group": "skills",
+        "color": "#f9b29c"
+    }, {
+        "Group": "abilities",
+        "color": "#fccfce"
+    }, {
+        "Group": "knowledge",
+        "color": "#d3e3c4"
+    }, {
+        "Group": "interest",
+        "color": " #908995"
+    }, {
+        "Group": "work activity",
+        "color": " #92c2c2"
+    }, {
+        "Group": "work style",
+        "color": " #fff0a6"
+    }, {
+        "Group": "work value",
+        "color": "#ffc04c"
+    }, {
+        "Group": "work context",
+        "color": "#d963a0"
+    }]
+
+    var legend = svg.selectAll(".legend")
+        .data(legenddata)
+        .enter().append("rect")
+        .attr("class", "legend")
+        .attr("x", function(d, i) {
+            return 10;
+        })
+        .attr("y", function(d, i) {
+            return height - 180 + i * 20;
+        })
+        .attr("width", 10)
+        .attr("height", 30)
+        .attr("fill", function(d) {
+            return d.color
+        })
+
+    var textLegend = svg.selectAll(".legendtext")
+        .data(legenddata)
+        .enter().append("text")
+        .attr("class", "legendtext")
+        .attr("x", function(d, i) {
+            return 33;
+        })
+        .attr("y", function(d, i) {
+            return height - 180 + 15 + i * 20;
+        })
+        .style("font-size", '14px')
+        .text(function(d) {
+            return d.Group
+        })
+
+    svg.selectAll(".legendtitle")
+        .data(["Job Component"])
+        .enter().append("text")
+        .style("font-size", "14px")
+        .style("font-weight", "bold")
+        .attr("x", 10)
+        .attr("y", height - 200)
+        .text("Job Component :")
+
+    createRoundLegend();
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    </script>
+</body>
+</HTML>

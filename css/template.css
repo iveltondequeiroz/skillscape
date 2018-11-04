@@ -1,0 +1,175 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 8 Jun, 2016, 8:17:58 PM
+    Author     : ahextech
+*/
+.bar {
+    fill: steelblue;
+}
+
+.bar:hover {
+    fill: brown;
+}
+
+.axis {
+    font: 13px Raleway;
+    font-weight: bold;
+    fill: steelblue;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: steelblue;
+    shape-rendering: crispEdges;   
+}
+
+
+.x .axis .tick text {
+    display: none;
+}
+.x .tick{
+    stroke-width:0;
+
+}
+#graph2 {
+    display: none;
+}
+
+.d3-tip {
+    line-height: 1;
+    padding: 8px;
+    background: white;
+    color: black;
+    font-size: 12px;
+    font-family: sans-serif;
+    border-radius: 2px;
+    border: solid 1px #aaa;                
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+    box-sizing: border-box;
+    display: inline;
+    font-size: 10px;
+    width: 100%;
+    line-height: 1;
+    color: rgba(0, 0, 0, 0.8);
+    content: "\25BC";
+    position: absolute;
+    text-align: center;
+
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+    margin: -1px 0 0 0;
+    top: 100%;
+    left: 0;
+}
+
+div.tooltip {
+    position: absolute;
+    text-align: left;
+    padding: 2px;
+    font: 12px sans-serif;
+    border: 4px;
+    border-radius: 2px;
+    pointer-events: none;
+    background: white;
+    border: solid 1px #aaa;
+}
+
+#bar_chart{
+    margin-top:50px;
+    margin-left: 50px;
+    padding-bottom: 50px;
+}
+.toggle-button {
+    background-color: white;
+    margin: 5px 0;
+    border-radius: 20px;
+    border: 2px solid #D0D0D0;
+    height: 24px;
+    cursor: pointer;
+    width: 50px;
+    position: relative;
+    display: inline-block;
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+}
+
+.toggle-button button {
+    cursor: pointer;
+    outline: 0;
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-radius: 100%;
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    float: left;
+    margin: -3px 0 0 -3px;
+    border: 2px solid #D0D0D0;
+    transition: left 0.3s;
+}
+
+.active{
+    background-color: #47c9af;
+    border: 2px solid #47c9af;
+}
+
+.active button {
+    left: 26px;
+    top: 0;
+    margin: 0;
+    border: none;
+    width: 24px;
+    height: 24px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+}
+
+#search .box2{
+    margin: 0 0 10px;
+}
+.job-parameter-wrapper, .job-color-wrapper,.job-color-wrapper2,.job-parameter-wrapper2{
+    font-size: 15px;
+    width:190px;
+    display:none;
+    /*margin-top: -70px;*/
+}
+.x .tick text{
+    display: none;
+}
+.cd-close,.random-selection{
+    margin-top: 20px;
+}
+/*.main-wrapper{
+    width:800px;
+}*/
+/* .job-wrapper{
+    margin-top: -63px;
+}*/
+.random-selection{
+    display: none;
+}
+.graph-wrapper{
+    margin-top: 20px;
+}
+
+@media only screen and (max-width: 767px) {
+    #graph2{
+        margin-left: -45px;
+    }
+}
+#random2{
+    margin-top: 15px;
+}

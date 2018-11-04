@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang=''>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+    <title>Skillscape</title>
+    <style>
+    body {
+        font-family: 'Raleway', sans-serif;
+
+    }
+
+
+    
+    .node {
+        stroke: #fff;
+        stroke-width: 1.5px;
+    }
+    
+    .link {
+        fill: none;
+        stroke: #bbb;
+    }
+    
+    div.tooltip {
+        position: absolute;
+        text-align: center;
+        padding: 2px;
+        font: 12px sans-serif;
+        border: 0px;
+        border-radius: 8px;
+        pointer-events: none;
+    }
+    
+    .toggle-button {
+        background-color: white;
+        margin: 5px 0;
+        border-radius: 20px;
+        border: 2px solid #D0D0D0;
+        height: 20px;
+        cursor: pointer;
+        width: 40px;
+        position: relative;
+        display: inline-block;
+        user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        -moz-user-select: none;
+    }
+    
+    .toggle-button button {
+        cursor: pointer;
+        outline: 0;
+        display: block;
+        position: absolute;
+        left: 0px;
+        top: 1px;
+        border-radius: 100%;
+        width: 24px;
+        height: 24px;
+        background-color: white;
+        float: left;
+        margin: -3px 0 0 -3px;
+        border: 2px solid #D0D0D0;
+        transition: left 0.3s;
+    }
+    
+    .toggle-button-selected {
+        background-color: #47c9af;
+        border: 2px solid #47c9af;
+    }
+    
+    .toggle-button-selected button {
+        left: 20px;
+        top: 0;
+        margin: 0;
+        border: none;
+        width: 20px;
+        height: 20px;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /*-----------------------for imagine in Team page -----------------*/
+
+
+.subsection {
+    font-size:18px;
+}
+
+a {
+    font-size: 16px}
+}
+
+h5 {
+    text-align: center;
+    display: table;
+    width: 100%;
+    border: .25em solid gray;
+}
+
+h5 > span, h5:before, h5:after {
+    display: table-cell;
+}
+
+h5:before, h5:after {
+    background: url(http://dummyimage.com/2x1/f0f/fff&text=+) repeat-x center;
+    width: 50%;
+    content: ' ';
+}
+
+h5 > span {
+    white-space: nowrap;
+
+    padding: 0 9px;
+}
+
+.center {
+    text-align: center;
+}
+
+.main-text {
+    margin-left: 20px; 
+    margin-right: 20px;
+    font-size:16px;
+    align:justify;
+}
+
+
+#container-concept {
+    text-align: justify;
+    padding-left:25%; 
+    padding-right:25%;
+
+}
+
+#container-concept > div {
+    width: 120px; /* Declare your value. Can be in relative units. */
+    display: inline-block;
+    vertical-align: top;
+
+    /* IE fix. */
+    *display: inline;
+    zoom: 1;
+}
+
+#container-concept:after {
+    content: "";
+    width: 100%;
+    display: inline-block;
+}
+
+
+#container-modeling {
+    text-align: justify;
+    padding-left:10%; 
+    padding-right:10%;
+
+}
+
+#container-modeling > div {
+    width: 200px; /* Declare your value. Can be in relative units. */
+    display: inline-block;
+    vertical-align: top;
+
+    /* IE fix. */
+    *display: inline;
+    zoom: 1;
+}
+
+#container-modeling:after {
+    content: "";
+    width: 100%;
+    display: inline-block;
+}
+
+
+@media only screen and (max-width: 767px) {
+
+#container-concept {
+    text-align: justify;
+    padding-left:20%; 
+    padding-right:20%;
+
+}
+
+
+}
+
+@media only screen and (max-width: 400px) {
+#container-concept {
+    text-align: justify;
+    padding-left:10%; 
+    padding-right:10%;
+
+}
+
+
+#container-modeling {
+    text-align: justify;
+    padding-left:20%; 
+    padding-right:20%;
+
+}
+
+#container-modeling > div {
+    width: 220px; /* Declare your value. Can be in relative units. */
+    display: inline-block;
+    vertical-align: top;
+
+    /* IE fix. */
+    *display: inline;
+    zoom: 1;
+}
+
+
+}
+    
+    </style>
+    <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="json files/job_categories.js"></script>
+    <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div>
+    <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header" id='websiteTitle'>
+            <img src="symbol_color.png" id='websiteTitleIMG' style="position:relative; float:left;"><span style='float:left'>&nbsp; Skillscape</span>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cssmenu" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="cssmenu">
+            <ul class="nav navbar-nav">
+                <li><a href='index.html'>Home</a></li>
+                <li><a href='jobs_explore.html'>Explore Jobs</a></li>
+                <li><a href='jobs_compare.html'>Compare Jobs</a></li>
+                <li><a href='city_explore.html'>Explore Cities</a></li>
+                <li><a href='city_compare.html'>Compare Cities</a></li>
+                <li class='active'><a href='about.html'>About</a></li>
+                <li><a href='methods.html'>Methods</a></li>
+            </ul>
+        </div>
+    </div>
+    </nav>
+
+<div class="main-text">The Skillscape is a project from the <a href="http://scalable.media.mit.edu/" target="_blank">Scalable Cooperation group</a> at The MIT Media Lab. This project is part of a broader effort to help society understand how Artificial Intelligence and robotic automation can impact human labor. 
+<br>
+Skillscape is made possible through generous support from Reid Hoffman and the <a href="http://cces-kacst-mit.org/" target="_blank">Center for Complex Engineering Systems</a>.
+</div>
+<br>
+<h5 style="padding-left:5%; padding-right: 5%;"><span>Concept</span></h5>
+<div class="center" >
+    <span><a href="http://www.mit.edu/~irahwan/" target="_blank">Iyad&nbsp;Rahwan</a></a></span> 
+</div>  
+<br>
+<h5 style="padding-left:5%; padding-right: 5%"><span>Data Analysis & Modeling</span></h5>
+<div id="container-modeling">
+    <div style="text-align: center"><a href="http://cces-kacst-mit.org/people/ahmad-alabdulkareem" target="_blank">Ahmad Alabdulkareem</a></div>
+    <div style="text-align: center"><a href="http://web.media.mit.edu/~sunlijun/" target="_blank">Lijun&nbsp;Sun</a></div>
+    <div style="text-align: center"><a href="http://web.media.mit.edu/~mrfrank/MRFhome.html" target="_blank">Morgan&nbsp;Frank</a></div>
+</div>
+
+<h5 style="padding-left:5%; padding-right: 5%;"><span>Web Site Design & Development</span></h5>
+<div class="center" >
+    <span><a href="https://www.linkedin.com/in/bedoor" target="_blank">Bedoor AlShebli</a></span> 
+    <br><br>
+    <span style="font-size:15px">with contributions from</span><br>
+    <span><a href="https://www.linkedin.com/in/pai-ju-chang-31aa14104" target="_blank">Pai-Ju Chang</a></span>
+</div>  
+<br>
+<h5 style="padding-left:5%; padding-right: 5%;"><span>Collaborators</span></h5>
+<div class="center" >
+    <span><a href="http://www.chidalgo.com/" target="_blank">Cesar&nbsp;Hidalgo</a></span> 
+</div>  
+<br>
+<!--     
+<div class="center" style="padding-bottom: 5px">
+            <img src="imgs\sc_logo.png"/>
+            <img src="imgs\ml_logo.png"/>
+            <img src="imgs\mit.png" >
+</div>    
+-->        
+</body>
+
+</body>
+</html>

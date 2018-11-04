@@ -1,0 +1,313 @@
+@import url(http://fonts.googleapis.com/css?family=Raleway);
+#websiteTitle {
+    font-size: 40px;
+}
+
+#websiteTitleIMG {
+    width: 50px;
+    height: 50px;
+}
+/*select {
+    outline:none;
+    display: inline-block;
+
+    -webkit-appearance:none;
+    -moz-appearance:menulist-textfield;
+    appearance:none;
+}
+*/
+/*
+select {
+    padding:3px;
+    margin: 0;
+    -webkit-border-radius:4px;
+    -moz-border-radius:4px;
+    border-radius:4px;
+    -webkit-box-shadow: 0 0px 0 #ccc, 0 -1px #fff inset;
+    -moz-box-shadow: 0 0px 0 #ccc, 0 -1px #fff inset;
+    box-shadow: 0 0px 0 #ccc, 0 -1px #fff inset;
+    background: grey;
+    color:#000;
+    outline:none;
+    display: inline-block;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    appearance:none;
+    cursor:pointer;
+}
+
+
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    select {padding-right:18px}
+}
+
+label {position:relative}
+
+label:after {
+    content:'<>';
+    font:11px "Consolas", monospace;
+    color:#aaa;
+    -webkit-transform:rotate(90deg);
+    -moz-transform:rotate(90deg);
+    -ms-transform:rotate(90deg);
+    transform:rotate(90deg);
+    right:8px; top:2px;
+    padding:0 0 2px;
+    border-bottom:1px solid #ddd;
+
+    position:absolute;
+    pointer-events:none;
+}
+
+label:before {
+    content:'';
+    right:6px; top:0px;
+    width:20px; height:20px;
+    background:#f8f8f8;
+    position:absolute;
+    pointer-events:none;
+    display:block;
+}
+/* end of making select flat */
+
+
+.searchCompare {
+    font-size: 15px;
+}
+
+    .descriptionCompare {
+        display: block;
+        font-size:14px;
+        padding-right:50px;
+    }
+    
+    .jobnameCompare {
+        font-size: 30px;
+        padding-right:50px;
+    }
+
+    .jobnameExplore {
+        font-size: 30px;
+        padding-right:10px;
+    }
+
+        .descriptioExplore {
+        display: block;
+        font-size:14px;
+        padding-right:10px;
+    }
+
+
+/* width is above 768px */
+
+@media only screen and (min-width: 768px) {
+    #cssmenu,
+    #cssmenu ul,
+    #cssmenu ul li,
+    #cssmenu ul li a {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        list-style: none;
+        position: relative;
+        float: right;
+    }
+    #cssmenu ul {
+        background: #ffffff;
+    }
+    #cssmenu > ul > li {
+        float: left;
+    }
+    #cssmenu.align-center > ul {
+        font-size: 0;
+        text-align: center;
+    }
+    #cssmenu.align-center > ul > li {
+        float: none;
+    }
+    #cssmenu.align-right > ul > li {
+        float: right;
+    }
+    #cssmenu.align-right > ul > li > a {
+        margin-right: 0;
+        margin-left: -4px;
+    }
+    #cssmenu > ul > li > a {
+        z-index: 2;
+        padding: 12px 25px 12px 25px;
+        font-size: 15px;
+        font-weight: 400;
+        text-decoration: none;
+        color: #444444;
+        -webkit-transition: all .2s ease;
+        -moz-transition: all .2s ease;
+        -ms-transition: all .2s ease;
+        -o-transition: all .2s ease;
+        transition: all .2s ease;
+        margin-right: -4px;
+    }
+    #cssmenu > ul > li.active > a,
+    #cssmenu > ul > li:hover > a,
+    #cssmenu > ul > li > a:hover {
+        color: #ffffff;
+        background-color: #fff;
+    }
+    #cssmenu > ul > li > a:after {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        z-index: -1;
+        width: 100%;
+        height: 120%;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        content: "";
+        -webkit-transition: all .2s ease;
+        -o-transition: all .2s ease;
+        transition: all .2s ease;
+        -webkit-transform: perspective(5px) rotateX(2deg);
+        -webkit-transform-origin: bottom;
+        -moz-transform: perspective(5px) rotateX(2deg);
+        -moz-transform-origin: bottom;
+        transform: perspective(5px) rotateX(2deg);
+        transform-origin: bottom;
+    }
+    #cssmenu > ul > li.active > a:after,
+    #cssmenu > ul > li:hover > a:after,
+    #cssmenu > ul > li > a:hover:after {
+        background: #47c9af;
+    }
+}
+
+
+/* width is above 1223px */
+
+@media only screen and (min-width: 1119px) {
+    #cssmenu ul {
+        padding-top: 10px;
+    }
+    #cssmenu > ul > li > a {
+        padding: 22px 25px 15px 25px;
+    }
+}
+
+
+/* width is below 767px */
+
+@media only screen and (max-width: 767px) {
+    .navbar-header {
+        padding-left: 10px;
+    }
+    #websiteTitle {
+        font-size: 30px;
+    }
+    #websiteTitleIMG {
+        width: 40px;
+        height: 40px;
+    }
+    .searchCompare {
+        font-size: 10px;
+    }
+
+    .descriptionCompare {
+            display: block;
+            font-size:10px;
+            padding-left:10px;
+            padding-right:10px;
+        }
+
+
+        .jobnameCompare {
+            font-size: 15px;
+            padding-left:10px;
+            padding-right:10px;
+        }
+}
+
+
+/*------------------------ for all size ----------------*/
+
+.navbar-inverse {
+    background-color: #fff;
+    border: 0px;
+    border-bottom: solid 2px #47c9af;
+    /*z-index:20; Re defing z-index for tooltip issue*/
+    z-index: 0;
+}
+
+.navbar-inverse .navbar-toggle:hover {
+    background-color: #a3e4d7;
+}
+
+.navbar-inverse .navbar-toggle:focus {
+    background-color: #47c9af;
+}
+
+.navbar-toggle {
+    background-color: #47c9af;
+}
+
+.navbar-inverse .navbar-toggle {
+    border-color: #47c9af;
+}
+
+.navbar-inverse .navbar-nav > .active > a,
+.navbar-inverse .navbar-nav > .active > a:focus,
+{
+    background-color: #47c9af;
+}
+
+.navbar-collapse,
+.container > .navbar-header {
+    border: 0px;
+}
+
+a {
+    font-size: 15px;
+}
+
+.navbar-header {
+    padding-top: 10px;
+}
+
+/* collapse threshold */
+@media (max-width: 862px) {
+    .navbar-header {
+        float: none;
+    }
+    .navbar-toggle {
+        display: block;
+    }
+    .navbar-collapse {
+        border-top: 1px solid transparent;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+    }
+    .navbar-collapse.collapse {
+        display: none!important;
+    }
+    .navbar-nav {
+        float: none!important;
+        margin: 7.5px -15px;
+    }
+    .navbar-nav>li {
+        float: none;
+    }
+    .navbar-nav>li>a {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+    .navbar-text {
+        float: none;
+        margin: 15px 0;
+    }
+    /* since 3.1.0 */
+    .navbar-collapse.collapse.in { 
+        display: block!important;
+    }
+    .collapsing {
+        overflow: hidden!important;
+    }
+}
+

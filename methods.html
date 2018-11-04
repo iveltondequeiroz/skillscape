@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang=''>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+    <title>Skillscape</title>
+    <style>
+    body {
+        font-family: 'Raleway', sans-serif;
+
+    }
+    
+    .node {
+        stroke: #fff;
+        stroke-width: 1.5px;
+    }
+    
+    .link {
+        fill: none;
+        stroke: #bbb;
+    }
+    
+    div.tooltip {
+        position: absolute;
+        text-align: center;
+        padding: 2px;
+        font: 12px sans-serif;
+        border: 0px;
+        border-radius: 8px;
+        pointer-events: none;
+    }
+    
+    .toggle-button {
+        background-color: white;
+        margin: 5px 0;
+        border-radius: 20px;
+        border: 2px solid #D0D0D0;
+        height: 20px;
+        cursor: pointer;
+        width: 40px;
+        position: relative;
+        display: inline-block;
+        user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        -moz-user-select: none;
+    }
+    
+    .toggle-button button {
+        cursor: pointer;
+        outline: 0;
+        display: block;
+        position: absolute;
+        left: 0px;
+        top: 1px;
+        border-radius: 100%;
+        width: 24px;
+        height: 24px;
+        background-color: white;
+        float: left;
+        margin: -3px 0 0 -3px;
+        border: 2px solid #D0D0D0;
+        transition: left 0.3s;
+    }
+    
+    .toggle-button-selected {
+        background-color: #47c9af;
+        border: 2px solid #47c9af;
+    }
+    
+    .toggle-button-selected button {
+        left: 20px;
+        top: 0;
+        margin: 0;
+        border: none;
+        width: 20px;
+        height: 20px;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    </style>
+    <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="json files/job_categories.js"></script>
+    <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div>
+    <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header" id='websiteTitle'>
+            <img src="symbol_color.png" id='websiteTitleIMG' style="position:relative; float:left;"><span style='float:left'>&nbsp; Skillscape</span>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cssmenu" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="cssmenu">
+            <ul class="nav navbar-nav">
+                <li><a href='index.html'>Home</a></li>
+                <li><a href='jobs_explore.html'>Explore Jobs</a></li>
+                <li><a href='jobs_compare.html'>Compare Jobs</a></li>
+                <li><a href='city_explore.html'>Explore Cities</a></li>
+                <li><a href='city_compare.html'>Compare Cities</a></li>
+                <li><a href='about.html'>About</a></li>
+                <li class='active'><a href='methods.html'>Methods</a></li>
+            </ul>
+        </div>
+    </div>
+    </nav>
+
+    <div style="font-size: 18px; margin-left:5%;margin-right:5%;margin-bottom: 10%">
+      <br>
+      The labor market is one of the fundamental forces in the economy. At its core, the labor force is built on the skills, knowledge, and abilities of workers. The competitiveness of those workers depends on their ability to adapt to changing conditions, from computerization and industrial automation, to changes in labor demand. 
+      <br>
+      <br>
+      The Skillscape project helps individuals and policy-makers understand the composition of various jobs or entire labor markets. It allows us to unpack the skills inside different jobs, and to visualize how these skills relate to each other. By mapping entire cities into the skills landscape, policy-makers can understand how different cities compare in terms of their labor force's underlying skill composition. This has implications on the city's ability to compete with other cities, and to respond to external shocks, such as computerization and automation of various skills.
+      <br><br>
+      <b>The Network:</b>
+      <br><br>
+      <i>Revealed Comparative Advantage</i> (RCA) is defined as the ratio between:
+      <ol>
+        <li>the proportion of a particular skill in one job and, 
+        <li>the proportion of that skill across all jobs. 
+      </ol>
+     
+      An RCA value being greater than 1 indicates that skill is more important to the job, compared to all other jobs. We can also change the RCA values to binary as [RCA>1].
+      <br><br>
+      The proximity between two skills (edges) is the ratio between:
+      <ol>
+        <li>number of cases that their RCA values across jobs being greater than one, and
+        <li>the total number of cases of a single skill being greater than one. 
+      </ol>
+      A higher proximity indicates that two skills have a higher chance to appear together in a significant way.
+      <br><br>
+
+      The skill space (network) is built by first finding a maximum spanning tree in the proximity matrix and then linking up any paired skills with a proximity value greater than 0.8.
+
+      <br><br><br>
+
+      <b>Probability of computerization of jobs:</b><br><br>
+The job probabilities of computerization are as provided by Frey and Osborne.
+They convened a workshop of automation experts to identify U.S. Bureau of
+Labor Statistics (BLS) jobs that were "certainly automatable" (i.e.
+P(automation) = 1) or "certainly not automatable" (i.e. P(automation) =
+0). The O*NET workplace skills dataset is also provided by the U.S. Census
+and details the work place tasks and skills associated with each BLS job
+according to survey. For each highlighted BLS job, Frey and Osborne
+measured the importance of nine O*NET skills, which represent known
+bottlenecks to computerization. Finally, they use logistic regression on
+the same nine skills in each remaining BLS job to a probability of
+computerization for each job.<br><br>
+
+Risk of automation by workplace skill:
+O*NET provides the importance of each workplace skill to each BLS job.
+Given a skill, we can normalize these importance values across BLS jobs to
+identify how strongly each a skill indicates each job. We weight these
+values by the jobs' probability of computerization from Frey and Osborne
+and sum across jobs to produce an on average risk of automation for each
+O*NET skill.<br><br>
+
+Expected job displacement from automation in cities:
+BLS provides job counts for each U.S. Census metropolitan statistical
+area. We weight these job counts by the associated probability of
+computerization from Frey and Osborne to calculate the expected job
+displacement from imminent automation technology in each city.
+    </div>
+
+
+
+</body>
+</html>

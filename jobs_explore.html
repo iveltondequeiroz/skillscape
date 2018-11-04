@@ -1,0 +1,1254 @@
+<!doctype html>
+<html lang=''>
+
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="styles.css">
+        <link href="css/template.css" rel="stylesheet" type="text/css"/>
+        <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+        <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+        <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+        
+        <title>Skillcape</title>
+        <style>
+            body {
+                font-family: 'Raleway', sans-serif;
+                font-size: 40px;
+                background-color: white;
+            }
+
+            .node {
+                stroke: #003366;
+                stroke-width: 1px;
+            }
+            .link {
+                fill: none;
+                stroke: #6fafaf;
+            }
+    
+            
+            .button {
+                background-color: #888888;
+                border: none;
+                color: white;
+                padding: 10px 25px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
+            }
+            /* for search box> */
+            /* min Jquery CSS elements for autocomplete */
+
+            .ui-autocomplete {
+                position: absolute;
+                cursor: default;
+            }
+
+            .ui-menu {
+                list-style: none;
+                padding: 2px;
+                margin: 0;
+                display: block;
+                float: left;
+                background-color: #f9f9f9;
+                border: 1px solid #efefef;
+                border-radius: 3px 3px 3px 3px;
+            }
+
+            .ui-menu .ui-menu {
+                margin-top: -3px;
+            }
+
+            .ui-menu .ui-menu-item {
+                margin: 0;
+                padding: 0;
+                zoom: 1;
+                float: left;
+                clear: left;
+                width: 100%;
+                font-family: arial;
+            }
+
+            .ui-menu .ui-menu-item a {
+                text-decoration: none;
+                display: block;
+                padding: .1em .3em;
+                line-height: 1.5;
+                zoom: 1;
+            }
+
+            .ui-menu .ui-menu-item a.ui-state-hover,
+            .ui-menu .ui-menu-item a.ui-state-active {
+                font-weight: bold;
+            }
+
+            .ui-helper-hidden-accessible {
+
+            }
+
+            .ui-widget-content {
+                width: 190px;
+                font-size: 12px;
+            }
+
+            .toggle-button {
+                background-color: white;
+                margin: 5px 0;
+                border-radius: 20px;
+                border: 2px solid #D0D0D0;
+                height: 24px;
+                cursor: pointer;
+                width: 50px;
+                position: relative;
+                display: inline-block;
+                user-select: none;
+                -webkit-user-select: none;
+                -ms-user-select: none;
+                -moz-user-select: none;
+            }
+
+            .toggle-button button {
+                cursor: pointer;
+                outline: 0;
+                display: block;
+                position: absolute;
+                left: 0;
+                top: 0;
+                border-radius: 100%;
+                width: 30px;
+                height: 30px;
+                background-color: white;
+                float: left;
+                margin: -3px 0 0 -3px;
+                border: 2px solid #D0D0D0;
+                transition: left 0.3s;
+            }
+
+            .toggle-button-selected,.active{
+                background-color: white;
+                border: none;
+            }
+
+            .toggle-button-selected button,.active button {
+                left: 26px;
+                top: 0;
+                margin: 0;
+                border: none;
+                width: 24px;
+                height: 24px;
+                box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+            }
+
+            #toggle,#toggle_chart {
+                top: 10px;
+            }
+            /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
+            #svglengend {
+                display: none;
+            }
+            /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
+            .legendtitle,
+            .legendtext {
+                font-size: 14px
+            }
+            /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
+            .cd-filter {
+                position: absolute;
+                left: 0;
+                width: 280px;
+                height: 640px;
+                background: #fff;
+                box-shadow: 4px 4px 20px transparent;
+                z-index: 2;
+                /* Force Hardware Acceleration in WebKit */
+                -webkit-transform: translateZ(0);
+                -moz-transform: translateZ(0);
+                -ms-transform: translateZ(0);
+                -o-transform: translateZ(0);
+                transform: translateZ(0);
+                -webkit-backface-visibility: hidden;
+                backface-visibility: hidden;
+                -webkit-transform: translateX(-100%);
+                -moz-transform: translateX(-100%);
+                -ms-transform: translateX(-100%);
+                -o-transform: translateX(-100%);
+                transform: translateX(-100%);
+                -webkit-transition: -webkit-transform 0.3s, box-shadow 0.3s;
+                -moz-transition: -moz-transform 0.3s, box-shadow 0.3s;
+                transition: transform 0.3s, box-shadow 0.3s;
+            }
+
+            .cd-filter.filter-is-visible {
+                -webkit-transform: translateX(0);
+                -moz-transform: translateX(0);
+                -ms-transform: translateX(0);
+                -o-transform: translateX(0);
+                transform: translateX(0);
+                box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.2);
+            }
+
+            .cd-filter-trigger {
+                /* image replacement */
+                overflow: hidden;
+                display: none;
+                background: transparent url("select-text.svg") no-repeat center center;
+                z-index: 3;
+            }
+
+            @media only screen and (max-width: 767px) {
+                .node {
+                    stroke-width: 0.5px;
+                }
+                .legendtitle {
+                    font-size: 10px
+                }
+                .legendtext {
+                    font-size: 7px
+                }
+            }
+
+            @media only screen and (max-width: 992px) {
+                #svglengend {
+                    display: block;
+                }
+                .cd-filter {
+                    display: block;
+                }
+                .cd-filter-trigger {
+                    display: block;
+                }
+                .box2 {
+                    display: none;
+                    /*padding-bottom: 10px;*/
+                }
+            }
+
+            #ui-id-1 {
+                z-index: 20;
+            }
+
+            .box1 {
+                padding-bottom: 10px;
+            }
+            @media screen and (-webkit-min-device-pixel-ratio:0) {                           
+
+            }
+            .active{
+                background-color: white;
+                border: none;
+            }
+
+            .active button {
+                left: 26px;
+                top: 0;
+                margin: 0;
+                border: none;
+                width: 24px;
+                height: 24px;
+                box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+            }
+            @media only screen and (min-width: 768px) and (max-width: 992px) {}
+            /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+        </style>
+        <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'></link>
+        <script type="text/javascript" src="json files/job_categories.js"></script>
+        <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+    </head>
+
+    <body>
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header" id='websiteTitle'>
+                    <img src="symbol_color.png" id='websiteTitleIMG' style="position:relative; float:left;"><span style='float:left'>&nbsp; Skillscape</span>
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cssmenu" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="cssmenu">
+                    <ul class="nav navbar-nav">
+                        <li><a href='index.html'>Home</a></li>
+                        <li class='active'><a href='jobs_explore.html'>Explore Jobs</a></li>
+                        <li ><a href='jobs_compare.html'>Compare Jobs</a></li>
+                        <li  ><a href='city_explore.html'>Explore Cities</a></li>
+                        <li><a href='city_compare.html'>Compare Cities</a></li>
+                        <li ><a href='about.html'>About</a></li>
+                        <li><a href='methods.html'>Methods</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- cd-filter -->
+        <div class="cd-filter searchCompare" style='padding-left:20px;font-size:13px; line-height: 20px'>
+            <h2> Filter:</h2>
+            <div id="toggle_chart2">
+                <b>Chart View:</b>
+                <input type="checkbox" data-toggle="toggle" data-size="small" data-on="Bar " data-off="Network">
+                
+            </div>
+            <br>
+            <label for="categories2"><b>Job Category 1: </b></label>
+            <br>
+            <select name="categories2" id="categories2" style="width:190px;">
+                <option>Select Category ...</option>
+            </select>
+            <br><br>
+            <b>Job  Title  1: </b>
+            <br>
+            <select name="jobs2" id="jobs2" class="job-tittle" style="width:190px;">
+                <option>Select Title ...</option>
+            </select>
+            <br>
+            <input type="button"  id="random2" value="Random">
+            <input type="button" class="random-selection" value="Random">
+            <br><br>
+            <b>Search:</b>
+            <br>
+            <input type='text' title='Tags' id='tags2' class='tags' style="width:190px;" />
+            <br><br>
+            <div class="auto2">
+                <b>Risk of Automation:</b>
+                <div id="toggle2">
+                    <input type="checkbox" data-toggle="toggle" data-size="small">
+                </div>  
+            </div>
+            
+    
+            <div class="job-parameter-wrapper2">
+                <label for="parameters2"><b>Skill Order: </b></label>
+                <select name="parameters2" id="parameters2" >
+                    <!--<option value=" ">Select Parameters ...</option>-->
+                    <option value="job">Job Component</option>
+                    <option value="comp">Complexity</option>
+                    <option value="prob">Risk of Automation</option>
+
+                </select>
+            </div>
+
+
+            <div class="job-color-wrapper2">
+                <label for="color-selection2"><b>Skill Color: </b></label>
+                <select name="color-selection2" id="color-selection2" >
+                    <!--<option value=" ">Select Parameters ...</option>-->
+                    <option value="job">Job Component</option>
+                    <option value="comp">Complexity</option>
+                    <option value="prob">Risk of Automation</option>
+                    <option value="none">None</option>
+
+                </select>
+            </div>
+
+            <button type="button" class="btn btn-default cd-close">
+                <span class="glyphicon glyphicon-remove-circle"></span> Close
+            </button>
+
+
+        </div>
+        <!-- cd-filter -->
+        <div class="container-fluid">
+            <div id="allplot" class="row">
+                <div id="search" class='searchCompare col-sm-12 col-md-2 col-lg-2' action="" name="search" style="position:relative;">
+                    <div style="margin-left:10px">
+                        <button type="button" class="btn btn-default cd-filter-trigger">
+                            <span class="glyphicon glyphicon-cog"></span> Filter
+                        </button>
+                         
+                        <div class='box2'>
+                            <div id="toggle_chart">
+                                <b>Chart View:</b>
+                                <input type="checkbox" data-toggle="toggle" data-size="small" data-on="Bar " data-off="Network" class="cd-filter-trigger">
+                            </div>
+                        </div>
+                        
+                        <div class='box2'>
+                            <label for="categories"><b>Job Category 1: </b></label>
+                            <select name="categories" id="categories" style="width:155px;">
+                                <option>Select Category ...</option>
+                            </select>
+                        </div>
+                        <div class='box2'>
+                            <b>Job  Title  1: </b>
+                            <select name="jobs" id="jobs" class="job-tittle" style="width:155px;">
+                                <option>Select Title ...</option>
+                            </select>
+                        </div>
+                        <div class='box2'>
+                            <input type="button"  id="random1" value="Random">
+                            <input type="button" class="random-selection" value="Random">
+
+                        </div>
+                        <div class='box2'>
+                            <b>Search:</b>
+                            <input type='text' title='Tags' value=" " id='tags' class='tags' style="width:155px;" />
+                        </div>
+                        
+                        <div class='box2 auto-btn'>
+                            <b>Risk of Automation:</b>
+                            <div id="toggle" class="auto-btn">
+                                <input type="checkbox" data-toggle="toggle" data-size="small" >
+                            </div>
+                        </div>
+                        
+                        <div class='box2 '>
+                            <div class="job-parameter-wrapper">
+                                <label for="parameters"><b>Skill Order: </b></label>
+                                <select name="parameters" id="parameters" >
+                                    <option value="job">Job Component</option>
+                                    <option value="comp">Complexity</option>
+                                    <option value="prob">Risk of Automation</option>
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class='box2'>
+                            <div class="job-color-wrapper">
+                                <label for="color-selection"><b>Skill Color: </b></label>
+                                <select name="color-selection" id="color-selection" >
+                                    <option value="job">Job Component</option>
+                                    <option value="comp">Complexity</option>
+                                    <option value="prob">Risk of Automation</option>
+                                    <option value="none">None</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div id="allplot2">
+                        </div>
+                        <div id="allplot3">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-10 col-lg-10">
+                    <div class="row">
+                        <div class="col-lg-9 col-md-7 col-sm-6 col-xs-12 main-wrapper ">
+                            <div class="graph-wrapper">
+                                <div id="graph1"></div> 
+                            </div>
+                            <div id="bar_chart" style="display:none"></div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div id="title_description">
+                                <div id="jobname" class='jobnameExplore' style="position:relative;top:0%; "></div>
+                                <div id="description" class='descriptioExplore' style="position:relative;  top:5%; "></div>
+                            </div>
+                        </div>                   
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="d3.v3.min.js"></script>
+        <script src="jquery.min.js"></script>
+        <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+        <script>
+            /////////////////////////////////////////////////////////////////
+            $('.cd-filter-trigger').on('click', function () {
+                triggerFilter(true);
+            });
+            $('.cd-filter .cd-close').on('click', function () {
+                triggerFilter(false);
+            });
+
+            function triggerFilter($bool) {
+                var elementsToTrigger = $([$('.cd-filter-trigger'), $('.cd-filter'), $('.cd-tab-filter'), $('.cd-gallery')]);
+                elementsToTrigger.each(function () {
+                    console.log(this)
+                    $(this).toggleClass('filter-is-visible', $bool);
+                });
+            }
+
+
+            $('.cd-filter').css({
+                "top": $('.container-fluid').height(),
+            })
+
+            ///////////////////////////////////////////////
+
+            var scalesize = $(window).width() > 767 ? 1 : 0.3
+
+
+            function definedlegend() {
+
+                if ($(window).width() > 992) {
+
+                    drawLegend(svglengend2);
+                    createRoundLegend(svglengend2);
+                } else {
+                    drawLegend(svglengend);
+                    createRoundLegend(svglengend);
+                }
+
+            }
+
+            function createRoundLegend(svg) {
+                var g = svg.append("g");
+                svg.selectAll("#lengendcircle").remove()
+
+                if ($(window).width() > 767) {
+                    if ($(window).width() > 992) {
+                        var lengendcircle = g.append("g").attr("id", "lengendcircle").attr("transform", "translate(110," + 130 + ")")
+                        var sizetext = '12px'
+                    } else {
+
+                        var lengendcircle = g.append("g").attr("id", "lengendcircle").attr("transform", "translate(" + (150 + width * 9 / 20) + ",8)")
+                        var sizetext = '12px'
+                    }
+                } else {
+                    var lengendcircle = g.append("g").attr("id", "lengendcircle").attr("transform", "translate(" + (100 + width * 9 / 20) + ",8)scale(0.3)")
+                    var sizetext = '25px'
+                }
+                var text = ['high', 'low'];
+                var sizes = [6, 12, 24];
+                for (var i in sizes) {
+                    lengendcircle.append("circle")
+                            .attr("r", sizes[i])
+                            .attr("cx", 25)  //sizes[sizes.length - 1])
+                            .attr("cy", 2 * sizes[sizes.length - 1] - sizes[i])
+                            .attr('stroke', 'black')
+                            .attr("fill", 'none');
+                    
+                    lengendcircle.append("text")
+                            .style("font-size", sizetext)
+                            .style("color", "black")
+                            .attr("x", 13)
+                            .attr("y", (70 * i)-8   )
+                            .text(text[i]);
+
+                    lengendcircle.append("text")
+                            .style("font-size", sizetext)
+                            .style("color", "black")
+                            .attr("x", 13)
+                            .attr("y", 20 )
+                            .text("RCA");        
+                    
+                    /*lengendcircle.append("line")
+                            .attr("x1", sizes[sizes.length - 1])
+                            .attr("y1", 0)
+                            .attr("x2", 22)
+                            .attr("y2", 0)
+                            .attr('stroke', 'black')
+
+                    lengendcircle.append("line")
+                            .attr("x1", sizes[sizes.length - 1])
+                            .attr("y1", 0 + 2 * (sizes[sizes.length - 1] - sizes[0]))
+                            .attr("x2", 22)
+                            .attr("y2", 0 + 2 * (sizes[sizes.length - 1] - sizes[0]))
+                            .attr('stroke', 'black')
+                    */
+
+                }
+            }
+
+            ///////////////////////////////////////////////////////////////////////////
+
+            function drawLegend(svg) {
+
+                svg.selectAll(".legend").remove()
+                svg.selectAll(".legendtext").remove()
+                svg.selectAll(".legendtitle").remove()
+
+
+                var legenddata = [{
+                        "Group": "skills",
+                        "color": "#f9b29c"
+                    }, {
+                        "Group": "abilities",
+                        "color": "#fccfce"
+                    }, {
+                        "Group": "knowledge",
+                        "color": "#d3e3c4"
+                    }, {
+                        "Group": "interest",
+                        "color": " #908995"
+                    }, {
+                        "Group": "work activity",
+                        "color": " #92c2c2"
+                    }, {
+                        "Group": "work style",
+                        "color": " #fff0a6"
+                    }, {
+                        "Group": "work value",
+                        "color": "#ffc04c"
+                    }, {
+                        "Group": "work context",
+                        "color": "#d963a0"
+                    }]
+
+                var legenddata2 = [{
+                        "Group": "High Risk",
+                        "color": 0.67
+                    }, {
+                        "Group": "",
+                        "color": 0.62
+                    }, {
+                        "Group": "",
+                        "color": 0.57
+                    }, {
+                        "Group": "Neutral",
+                        "color": 0.52
+                    }, {
+                        "Group": "",
+                        "color": 0.47
+                    }, {
+                        "Group": "",
+                        "color": 0.42
+                    }, {
+                        "Group": "Low Risk",
+                        "color": 0.37
+                    }]
+
+
+                if (on) {
+                    var legend = svg.selectAll(".legend")
+                            .data(legenddata)
+                            .enter().append("rect")
+                            .attr("class", "legend")
+                            .attr("fill", function (d) {
+                                return d.color
+                            })
+
+
+                    var textLegend = svg.selectAll(".legendtext")
+                            .data(legenddata)
+                            .enter().append("text")
+                            .attr("class", "legendtext")
+
+                            .text(function (d) {
+                                return d.Group
+                            })
+
+                    var titlelegend = svg.selectAll(".legendtitle")
+                            .data(["Job Component"])
+                            .enter().append("text")
+                            .attr("class", "legendtitle")
+                            .style("font-weight", "bold")
+                            .text("Job Component :")
+
+                    ////////////////////////////////////////////////////////
+                    if ($(window).width() > 992) {
+
+                        legend
+                                .attr("x", function (d, i) {
+                                    return 0;
+                                })
+                                .attr("y", function (d, i) {
+                                    return 30 + i * 20;
+                                })
+                                .attr("width", 10)
+                                .attr("height", 20)
+
+                        textLegend.attr("x", function (d, i) {
+                            return 20;
+                        })
+                                .attr("y", function (d, i) {
+                                    return 45 + i * 20;
+                                })
+
+
+                        titlelegend.attr("x", 0)
+                                .attr("y", 15)
+
+
+                    } else {
+                        var ssift = 100
+                        if ($(window).width() > 767) {
+                            ssift = 150
+
+                        }
+                        legend
+                                .attr("width", width / 20)
+                                .attr("height", 10)
+                                .attr("x", function (d, i) {
+                                    return 0 + i * width / 20 + ssift;
+                                })
+                                .attr("y", function (d, i) {
+                                    return 10;
+                                })
+
+                        textLegend
+                                .attr("transform", function (d, i) {
+                                    return "translate(" + (i * width / 20 + (width / 2.5) / 20 + ssift) + ",28)rotate(35)";
+                                })
+
+
+
+
+
+                        titlelegend.attr("x", 5)
+
+                                .attr("y", 18)
+                    }
+                    ///////////////////////////////////////////////////////////////////
+
+                } else {
+
+
+
+                    var legend = svg.selectAll(".legend")
+                            .data(legenddata2)
+                            .enter().append("rect")
+                            .attr("class", "legend")
+                            .attr("fill", function (d) {
+                                return color(d.color)
+                            })
+
+
+                    var textLegend = svg.selectAll(".legendtext")
+                            .data(legenddata2)
+                            .enter().append("text")
+                            .attr("class", "legendtext")
+
+                            .text(function (d) {
+                                return d.Group
+                            })
+
+                    var titlelegend = svg.selectAll(".legendtitle")
+                            .data(["Risk of Automation"])
+                            .enter().append("text")
+                            .attr("class", "legendtitle")
+                            .style("font-weight", "bold")
+                            .text("Risk :")
+
+                    ////////////////////////////////////////////////////////
+                    if ($(window).width() > 992) {
+
+                        legend
+                                .attr("x", function (d, i) {
+                                    return 0;
+                                })
+                                .attr("y", function (d, i) {
+                                    return 40 + i * 20;
+                                })
+                                .attr("width", 10)
+                                .attr("height", 20)
+
+                        textLegend.attr("x", function (d, i) {
+                            return 20;
+                        })
+                                .attr("y", function (d, i) {
+                                    return 55 + i * 20;
+                                })
+                        //.style("font-size", '14px')
+
+                        titlelegend.attr("x", 0)
+                                //.style("font-size", "14px")
+                                .attr("y", 15)
+
+
+                    } else {
+
+
+                        var ssift = 100
+                        if ($(window).width() > 767) {
+                            ssift = 170
+
+                        }
+
+                        legend
+                                .attr("width", width / 20)
+                                .attr("height", 10)
+                                .attr("x", function (d, i) {
+                                    return 0 + i * width / 20 + ssift;
+                                })
+                                .attr("y", function (d, i) {
+                                    return 10;
+                                })
+
+                        textLegend
+                                .attr("transform", function (d, i) {
+                                    return "translate(" + (i * width / 20 + (width / 2.5) / 20 + ssift) + ",28)rotate(35)";
+                                })
+                        //.style("font-size", "7px")
+
+
+
+
+                        titlelegend.attr("x", 5)
+                                //.style("font-size", "10px")
+                                .attr("y", 18)
+                    }
+
+
+                }
+            }
+            ///////////////////////////////////////////////////////////////////////////////////
+            var borderwidth = $(window).width() > 992 ? $(window).width() / 5 : 100
+            var borderheight = $(window).width() > 992 ? $(window).width() / 5 : 50
+            var width = $('#graph1').width();
+            var height = $(window).width() > 992 ? ($(window).height()) * 0.8 : ($(window).height()) * 0.5
+            var charged = $(window).width() > 992 ? Math.min(height / 1, width / 1) : Math.min(height / 1.5, width / 1.5)
+            var chargev = $(window).width() > 992 ? -80 : -50
+
+
+            ////////////////////////////////
+            var categories = $(window).width() > 992 ? '#categories' : '#categories2'
+            var jobs = $(window).width() > 992 ? '#jobs' : '#jobs2'
+            var random = $(window).width() > 992 ? '#random1' : '#random2'
+
+            var toggle = $(window).width() > 992 ? '#toggle' : '#toggle2'
+            var tags = $(window).width() > 992 ? '#tags' : '#tags2'
+            var togglechart = $(window).width() > 992 ? '#toggle_chart' : '#toggle_chart2'
+
+
+            
+            
+            //var width = $('#graph1').width();
+            //var height = ($(window).height()) * 0.6;
+
+            var xscale = d3.scale.linear().domain([-10, 21]).range([borderwidth, width - borderwidth])
+            var yscale = d3.scale.linear().domain([-1, 25]).range([0 + borderheight, height - borderheight])
+
+
+            var force = d3.layout.force()
+                    //.charge(-20)
+                    //.linkDistance(20)
+                    .size([width, height]);
+            force
+                    .charge(chargev)
+                    //.charge(-40)
+                    .chargeDistance(charged);
+            
+            var iconobjs = [ 
+                {key:'abilities' , icon:'fa-trophy'},
+                {key:'interest', icon:'fa-eye'},
+                {key:'knowledge', icon:'fa-graduation-cap'},
+                {key:'skills', icon:'fa-rocket'},
+                {key:'workactivity', icon:'fa-cogs'},
+                {key:'workcontext', icon:'fa-cogs'},
+                {key:'workstyle', icon:'fa-cogs'},
+                {key:'workvalue', icon:'fa-cogs'}
+            ];
+                
+            // create tooltip
+            var tip = d3.tip()
+                .attr('class', 'd3-tip')
+                .offset([-10, 0])
+                .html(function (d) {
+                    icon="none";
+                    for (i = 0; i < iconobjs.length; i++) {
+                        if(iconobjs[i].key==d.group.replace(/\s+/g, '')){
+                            icon=iconobjs[i].icon;
+                        }
+                    }
+                    risk=d.p_auto.toString();
+                    styles="padding-bottom:2px;vertical-align:middle;color:"+d.scolor;
+                    return "&ensp;<i class='fa "+icon+" fa-2x' style="+styles+"></i>&ensp;<strong  style='color:black'>" + d.group.toUpperCase()+"</strong'>" 
+                            +"<br><pre>&ensp;"+d.name.toUpperCase()+"</pre>"
+                            +"<strong style='color:black'>&ensp;RCA : "+d.rca.substring(0, 6) 
+                            +"<br>&ensp;Complexity : "+d.complexity.substring(0, 6)
+                            +"<br>&ensp;Risk of Automation : "+risk.substring(0, 6)
+                            +"</strong>";
+                });
+                    
+            // two svg, one for plot one for legend(large device)
+            var svg = d3.select("#graph1").append("svg")
+                    .attr("width", width)
+                    .attr("height", height)
+                    .style("background-color", "#ffffff")
+                    .style("border-radius","2px")
+                    .style("border","solid 1px #aaa");
+            
+            svg.call(tip);
+
+            var svglengend2 = d3.select("#allplot2").append("svg")
+                    .attr("width", 250)
+                    .attr("height", 210)
+                    //.attr('transform',"translate(0,0)")
+//                    .attr('display', 'block')
+                    .attr('id', 'svglengend2');
+            var svglengend = d3.select("#graph1").append("svg")
+                    .attr("width", width)
+                    .attr("height", 80)
+                    .attr('id', 'svglengend');
+            // if screen size big or small
+
+            if ($(window).width() > 992) {
+                $('#search').css({
+                    "height": height,
+                })
+
+                $('#allplot2').css({
+                    "position": 'relative',
+                    "bottom": '0px'
+
+                })
+
+                var legendsvg = svglengend2
+            } else {
+                $('#allplot2').css({
+                    "display": 'none'
+
+                })
+
+
+                var legendsvg = svglengend
+
+            }
+
+
+            function dragstart(d) {
+                d3.select(this).classed("fixed", d.fixed = true);
+            }
+            ///////////////////////////////////////////////////
+
+            //toggle button code
+            colorDomain = [0.37, 0.52, 0.67], //[min,max]
+                    colorRange = ["#2c25fb", '#eeeeee', "#ff3333"] //["0000ff", "#ffffff", "#ff0000"]
+
+            var color = d3.scale.linear()
+                    .domain(colorDomain)
+                    .range(colorRange);
+            var on = 1;
+            $(document).on('click', toggle, function () {
+
+
+                if (on) {
+                    on = 0;
+                } else {
+                    on = 1;
+                }
+
+                console.log(on)
+                $(this).toggleClass('toggle-button-selected');
+                d3.json("json files/" + $(jobs).val() + ".json", function (error, graph) {
+                    update(graph);
+                });
+            });
+
+            ////////////////////////////////////////////////////////////////////////////////
+
+
+            function drawnetwork(graph) {
+
+                var drag = force.drag()
+                        .on("dragstart", dragstart);
+                svg.selectAll(".node").remove()
+                svg.selectAll(".tooltip").remove()
+
+                //var div = d3.select("body").append("div")
+                //        .attr("class", "tooltip")
+                //        .style("opacity", 0);
+                $('#jobname').text(graph.title)
+                        .attr("text-align", "left");
+                $('#description').text(graph.description)
+                        .attr("text-align", "left");
+                var nodes = graph.nodes.slice(),
+                        links = [],
+                        bilinks = [];
+                nodes.forEach(function (node) {
+                    node.x = xscale(+node.cx)
+                    node.y = yscale(+node.cy)
+                    //node.px = xscale(+node.cx)
+                    //node.fixed = true
+                })
+
+                graph.links.forEach(function (link) {
+                    var s = nodes[link.source],
+                            t = nodes[link.target],
+                            i = {}; // intermediate node
+                    nodes.push(i);
+                    links.push({
+                        source: s,
+                        target: t
+                    });
+                    bilinks.push([s, i, t]);
+                });
+                force
+                        .nodes(nodes)
+                        .links(links)
+                        //.alpha(0.1)
+                        .start();
+                var link = svg.selectAll(".link")
+                        .data(links)
+                        .enter().append("line")
+                        .attr("class", "link");
+                var node = svg.selectAll(".node")
+                        .data(graph.nodes);
+                node.enter().append("circle")
+                        .attr("class", "node")
+                        .attr("r", function (d) {
+                            return Math.min(30, +d.rca * 5 + 1) * scalesize;
+                            //return generateradiussize(+d.rca);
+
+                        })
+                        .style("fill", function (d) {
+                            return d.scolor
+                        })
+                        .on('mouseover', tip.show)
+                        .on('mouseout', tip.hide)
+                        .call(drag);
+                force.on("tick", function () {
+                    link.attr("x1", function (d) {
+
+                        return d.source.x;
+                    })
+                            .attr("y1", function (d) {
+                                return d.source.y;
+                            })
+                            .attr("x2", function (d) {
+                                return d.target.x;
+                            })
+                            .attr("y2", function (d) {
+                                return d.target.y;
+                            });
+                    node.attr("cx", function (d) {
+                        return d.x = Math.max(5, Math.min(width - 5, d.x));
+                    })
+                            .attr("cy", function (d) {
+                                return d.y = Math.max(5, Math.min(height - 5, d.y));
+                            })
+
+                });
+                node.exit().remove();
+            }
+            ;
+            ////////////////////////////////////////////////////////////////
+            function generatedropdown(data) {
+                (function ($) {
+
+                    $.fn.changeType = function () {
+                        var options_categories = '';
+                        $.each(category_data, function (i, d) {
+                            if (i == 0) {
+                                options_categories += '<option selected=true value="' + d.code + '">' + d.category + '<\/option>';
+                                var d = category_data[0];
+                                var options = '';
+                                $.each(d.jobs, function (i, j) {
+                                    options += '<option value="' + j.OCC_Code + '">' + j.title + '<\/option>';
+                                });
+                                $(jobs).html(options);
+                            } else {
+                                options_categories += '<option value="' + d.code + '">' + d.category + '<\/option>';
+                            }
+                        });
+                        console.log(this)
+                        console.log(categories)
+                        $(categories).html(options_categories);
+                        $(categories).change(function () {
+                            var index = $(this).get(0).selectedIndex;
+                            var d = category_data[index];
+                            var options = '<option>Select Title ...<\/option>';
+                            if (index >= 0) {
+                                $.each(d.jobs, function (i, j) {
+                                    options += '<option value="' + j.OCC_Code + '">' + j.title + '<\/option>';
+                                });
+                            } else {
+                                options += '';
+                            }
+                            $(jobs).html(options);
+                        })
+                    };
+                })(jQuery);
+                $(document).ready(function () {
+                    $("#search").changeType();
+                });
+                $(jobs).change(function (d) {
+                    console.log(this)
+                    d3.json("json files/" + this.value + ".json", function (error, graph) {
+                        update(graph);
+                    });
+                })
+
+            }
+            ;
+            function generateradiussize(rca) {
+                if (rca <= 0.2589988343) {
+                    return 1;
+                } else if (rca <= 0.5485674132) {
+                    return 2.5;
+                } else if (rca <= 0.7081012255) {
+                    return 4;
+                } else if (rca <= 0.8236051749) {
+                    return 5.5;
+                } else if (rca <= 0.9320670719) {
+                    return 7;
+                } else if (rca <= 1.0425610511) {
+                    return 8.5;
+                } else if (rca <= 1.1751796521) {
+                    return 10;
+                } else if (rca <= 1.3608859543) {
+                    return 11.5;
+                } else if (rca <= 1.7132505599) {
+                    return 13;
+                } else if (rca <= 19.6583007245) {
+                    return 14.5;
+                }
+
+            }
+            ;
+            ///////////////////////////////////////////////////////////////////
+
+            //d3.csv("data_generating/bedoor_jobname.csv", function(error, data) {
+            generatedropdown();
+            //});
+
+            d3.json("json files/11-1011.json", function (error, graph) {
+                drawnetwork(graph);
+            })
+
+
+
+
+
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            function update(graph) {
+
+                $('#jobname').text(graph.title)
+                        .attr("text-align", "left");
+                $('#description').text(graph.description)
+                        .attr("text-align", "left");
+                //remove old tooltip
+                svg.selectAll(".tooltip").remove()
+                // update new tooltip
+                var div = d3.select("body").append("div")
+                        .attr("class", "tooltip")
+                        .style("opacity", 0);
+                // read new data
+                var nodearray = graph.nodes;
+                var tempObject = {};
+                for (var i = 0; i < nodearray.length; ++i) {
+                    tempObject[nodearray[i]['name']] = +nodearray[i]['rca'];
+                }
+
+                // update node size
+                var nodeupdate = svg.selectAll(".node");
+                nodeupdate
+                        .transition()
+                        .duration(750)
+                        .attr("r", function (d) {
+                            return Math.min(30, tempObject[d.name] * 5 + 1) * scalesize;
+                            //return generateradiussize(tempObject[d.name]);
+
+                        });
+                
+                if (!on) {
+                    nodeupdate
+                            .style("fill", function (d) {
+                                if (d.p_auto == -1) {
+                                    return "#aaaaaa"
+                                } else {
+                                    return color(d.p_auto);
+                                }
+                            })
+                    definedlegend();
+                } else {
+                    nodeupdate
+                            .style("fill", function (d) {
+                                return d.scolor;
+                            })
+                    definedlegend();
+                }
+
+
+
+
+            }
+            /////////// for search box/////////////////
+
+            var jobList = {}
+            for (j = 0; j < category_data.length; j++) {
+                var item = category_data[j]
+                for (k = 0; k < item.jobs.length; k++) {
+                    jobList[item.jobs[k].title] = item.jobs[k].OCC_Code
+                }
+            }
+            //var dataArray = Object.keys(jobList).map(function(k){return jobList[k]});
+
+            $(tags).autocomplete({
+                source: Object.keys(jobList),
+            })
+
+
+            $(tags).keypress(function (e) {
+                if (e.keyCode == 13) {
+                    e.preventDefault();
+                    if ($.inArray(this.value, Object.keys(jobList)) > -1) {
+                        d3.json("json files/" + jobList[this.value] + ".json", function (error, graph) {
+                        console.log(graph)    
+                        update(graph);
+                        });
+                    }
+                }
+            })
+
+
+
+
+
+            definedlegend()
+
+            ////////////////////// add random////////////////////////
+            function RandomSelection() {
+                console.log(random)
+                $(random).click(function () {
+
+                    var randomCategorieIndex = Math.floor(Math.random() * category_data.length)
+                    var randomCategorie = category_data[randomCategorieIndex]
+                    var randomjobIndex = Math.floor(Math.random() * randomCategorie.jobs.length)
+                    var randomjob = randomCategorie.jobs[randomjobIndex]
+
+                    console.log(randomCategorie, randomjob)
+
+                    // update catefories dropdown
+
+                    $(categories).val(randomCategorie.code)
+                    // update jobs drop down
+                    var options = '';
+                    $.each(randomCategorie.jobs, function (i, j) {
+                        options += '<option value="' + j.OCC_Code + '">' + j.title + '<\/option>';
+                    });
+                    $(jobs).html(options);
+                    $(jobs).val(randomjob.OCC_Code);
+                    console.log(randomjob.OCC_Code)
+
+                    d3.json("json files/" + randomjob.OCC_Code + ".json", function (error, graph) {
+                        console.log('readfile')
+                        update(graph);
+                    });
+                })
+            }
+            RandomSelection()
+        </script>
+        <script src="js/charts.js" type="text/javascript"></script>
+        <script>
+            var togglechart = $(window).width() > 992 ? '#toggle_chart' : '#toggle_chart2'
+            $(document).on('click', togglechart, function () {
+                console.log(on2);
+                    
+                if (on2 == 1) {
+                    $(this).addClass('active');
+                    if ($(window).width() > 992) {
+                        $("#allplot2").css("display", "block")
+                    } else
+                    {
+                        $("#allplot2").remove()
+                    }
+                    $('#toggle').show();
+
+                }
+                
+                else {
+                    $(this).removeClass('active');
+                    $("#allplot2").css("display", "none");
+                    $('#toggle').hide();
+                }
+            })
+        </script>
+    </body>
+
+</HTML>

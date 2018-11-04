@@ -1,0 +1,851 @@
+<!doctype html>
+<html lang=''>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+    <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    
+    <title>Skillscape</title>
+    <style>
+    body {
+        font-family: 'Raleway', sans-serif;
+    }
+    
+    .node {
+        stroke: #003366;
+        stroke-width: 1px;
+    }
+    
+    .link {
+        fill: none;
+        stroke: #6fafaf;
+    }
+    
+    .d3-tip {
+        line-height: 1;
+        padding: 8px;
+        background: white;
+        color: black;
+        font-size: 12px;
+        font-family: sans-serif;
+        border-radius: 2px;
+        border: solid 1px #aaa;
+    }
+        
+    /* Creates a small triangle extender for the tooltip */
+    .d3-tip:after {
+        box-sizing: border-box;
+        display: inline;
+        font-size: 10px;
+        width: 100%;
+        line-height: 1;
+        color: rgba(0, 0, 0, 0.8);
+        content: "\25BC";
+        position: absolute;
+        text-align: center;
+
+    }
+
+    /* Style northward tooltips differently */
+    .d3-tip.n:after {
+        margin: -1px 0 0 0;
+        top: 100%;
+        left: 0;
+    }    
+    
+    
+    
+    #svglengend {
+        display: none;
+    }
+    /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+    
+    .legendtitle,
+    .legendtext {
+        font-size: 14px
+    }
+    /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+    
+    @media only screen and (max-width: 767px) {
+        .node {
+            stroke-width: 0.5px;
+        }
+        .legendtitle {
+            font-size: 10px
+        }
+        .legendtext {
+            font-size: 7px
+        }
+    }
+    
+    @media only screen and (max-width: 992px) {
+        #svglengend {
+            display: block;
+        }
+    }
+    
+    @media only screen and (min-width: 768px) and (max-width: 992px) {}
+    /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+    </style>
+    <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="json files/job_categories.js"></script>
+    <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div>
+    <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header" id='websiteTitle'>
+            <img src="symbol_color.png" id='websiteTitleIMG' style="position:relative; float:left;"><span style='float:left'>&nbsp; Skillscape</span>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cssmenu" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="cssmenu">
+            <ul class="nav navbar-nav">
+                <li><a href='index.html'>Home</a></li>
+                <li><a href='jobs_explore.html'>Explore Jobs</a></li>
+                <li ><a href='jobs_compare.html'>Compare Jobs</a></li>
+                <li><a href='city_explore.html'>Explore Cities</a></li>
+                <li class='active'><a href='city_compare.html'>Compare Cities</a></li>
+                <li ><a href='about.html'>About</a></li>
+                <li><a href='methods.html'>Methods</a></li>
+            </ul>
+        </div>
+    </div>
+    </nav>
+        <div id="graphall" style="position:absolute; width:100%; height:90%;">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <div>
+                    <span id="sidemenu1" class='searchCompare' action="" name="search"      style="position:relative; height:7%"></span>
+                    <span class="toggle-button" id="toggle1 style="padding-bottom:10px">
+                        <b>&nbsp;&nbsp;&nbsp;Risk of Automation:</b>                    
+                        <input type="checkbox" data-toggle="toggle" data-size="small">
+                    </span>
+                </div>                                                              
+            </div>
+            <div class="row">
+                <div id="graph1" class="col-sm-12 col-md-9 col-lg-9">
+                </div>
+                <div id="title_description1" class="col-sm-12 col-md-3 col-lg-3">
+                    <div id="cityname1" class='jobnameCompare' style="position:relative;top:0%; "></div>
+                    <div id="description1" class='descriptionCompare' style="position:relative;  top:5%; "></div>
+                </div>
+            </div>
+            <hr>
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <div id="sidemenu2" class='searchCompare' action="" name="search" style="position:relative;height:7%">
+                </div>
+            </div>
+            <div class="row">
+                <div id="graph2" class="col-sm-9 col-md-9 col-lg-9">
+                </div>
+                <div id="title_description2" class="col-sm-12 col-md-3 col-lg-3">
+                    <div id="cityname2" class='jobnameCompare' style="position:relative;top:0%;"></div>
+                    <div id="description2" class='descriptionCompare' style="position:relative;  top:5%;"></div>
+                </div>
+            </div>
+        </div>
+        <script src="http://d3js.org/d3.v3.min.js"></script>
+        <script src="jquery.min.js"></script>
+        <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+        
+        <script>
+        /////////////////////////////////////////////////////////////////
+        var scalesize = $(window).width() > 767 ? 1 : 0.3
+
+
+        function definedlegend(svg) {
+
+            if ($(window).width() > 992) {
+
+                drawLegend(svg);
+                createRoundLegend(svg);
+            } else {
+                drawLegend(svglengend);
+                createRoundLegend(svglengend);
+            }
+
+        }
+
+        function createRoundLegend(svg) {
+            var g = svg.append("g");
+            svg.selectAll("#lengendcircle").remove()
+
+            if ($(window).width() > 767) {
+                if ($(window).width() > 992) {
+                    var lengendcircle = g.append("g").attr("id", "lengendcircle").attr("transform", "translate(125," + (height - 80) + ")")
+                    var sizetext = '12px'
+                } else {
+
+                    var lengendcircle = g.append("g").attr("id", "lengendcircle").attr("transform", "translate(" + (150 + width * 9 / 20) + ",8)")
+                    var sizetext = '12px'
+                }
+            } else {
+                var lengendcircle = g.append("g").attr("id", "lengendcircle").attr("transform", "translate(" + (100 + width * 9 / 20) + ",8)scale(0.3)")
+                var sizetext = '25px'
+            }
+            var text = ['high', 'low'];
+            var sizes = [6, 12, 24];
+            for (var i in sizes) {
+                lengendcircle.append("circle")
+                    .attr("r", sizes[i])
+                    .attr("cx", sizes[sizes.length - 1])
+                    .attr("cy", 2 * sizes[sizes.length - 1] - sizes[i])
+                    .attr('stroke', 'black')
+                    .attr("fill", 'none');
+
+                lengendcircle.append("text")
+                    .style("font-size", sizetext)
+                    .style("color", "black")
+                    .attr("x", 13)
+                    .attr("y", (70 * i)-8   )
+                    .text(text[i]);
+
+                lengendcircle.append("text")
+                    .style("font-size", sizetext)
+                    .style("color", "black")
+                    .attr("x", 13)
+                    .attr("y", 20 )
+                    .text("RCA");     
+
+                /*lengendcircle.append("line")
+                    .attr("x1", sizes[sizes.length - 1])
+                    .attr("y1", 0)
+                    .attr("x2", 62)
+                    .attr("y2", 0)
+                    .attr('stroke', 'black')
+
+                lengendcircle.append("line")
+                    .attr("x1", sizes[sizes.length - 1])
+                    .attr("y1", 0 + 2 * (sizes[sizes.length - 1] - sizes[0]))
+                    .attr("x2", 62)
+                    .attr("y2", 0 + 2 * (sizes[sizes.length - 1] - sizes[0]))
+                    .attr('stroke', 'black')
+
+                */
+            }
+        }
+
+
+
+        ///////////////////////////////////////////////////////////////////////////
+
+        function drawLegend(svg) {
+
+            svg.selectAll(".legend").remove()
+            svg.selectAll(".legendtext").remove()
+            svg.selectAll(".legendtitle").remove()
+
+
+            var legenddata = [{
+                "Group": "skills",
+                "color": "#f9b29c"
+            }, {
+                "Group": "abilities",
+                "color": "#fccfce"
+            }, {
+                "Group": "knowledge",
+                "color": "#d3e3c4"
+            }, {
+                "Group": "interest",
+                "color": " #908995"
+            }, {
+                "Group": "work activity",
+                "color": " #92c2c2"
+            }, {
+                "Group": "work style",
+                "color": " #fff0a6"
+            }, {
+                "Group": "work value",
+                "color": "#ffc04c"
+            }, {
+                "Group": "work context",
+                "color": "#d963a0"
+            }]
+
+            var legenddata2 = [{
+                "Group": "High Risk",
+                "color": 0.67
+            }, {
+                "Group": "",
+                "color": 0.62
+            }, {
+                "Group": "",
+                "color": 0.57
+            }, {
+                "Group": "Neutral",
+                "color": 0.52
+            }, {
+                "Group": "",
+                "color": 0.47
+            }, {
+                "Group": "",
+                "color": 0.42
+            }, {
+                "Group": "Low Risk",
+                "color": 0.37
+            }]
+
+
+            if (on) {
+                var legend = svg.selectAll(".legend")
+                    .data(legenddata)
+                    .enter().append("rect")
+                    .attr("class", "legend")
+                    .attr("fill", function(d) {
+                        return d.color
+                    })
+
+
+                var textLegend = svg.selectAll(".legendtext")
+                    .data(legenddata)
+                    .enter().append("text")
+                    .attr("class", "legendtext")
+
+                .text(function(d) {
+                    return d.Group
+                })
+
+                var titlelegend = svg.selectAll(".legendtitle")
+                    .data(["Job Component"])
+                    .enter().append("text")
+                    .attr("class", "legendtitle")
+                    .style("font-weight", "bold")
+                    .text("Job Component :")
+
+                ////////////////////////////////////////////////////////
+                if ($(window).width() > 992) {
+
+                    legend
+                        .attr("x", function(d, i) {
+                            return 15;
+                        })
+                        .attr("y", function(d, i) {
+                            return height - 180 + i * 20;
+                        })
+                        .attr("width", 10)
+                        .attr("height", 20)
+
+                    textLegend.attr("x", function(d, i) {
+                            return 30;
+                        })
+                        .attr("y", function(d, i) {
+                            return height - 180 + 15 + i * 20;
+                        })
+
+
+                    titlelegend.attr("x", 15)
+                        .attr("y", height - 200)
+
+
+                } else {
+                    var ssift = 100
+                    if ($(window).width() > 767) {
+                        ssift = 150
+
+                    }
+                    legend
+                        .attr("width", width / 20)
+                        .attr("height", 10)
+                        .attr("x", function(d, i) {
+                            return 0 + i * width / 20 + ssift;
+                        })
+                        .attr("y", function(d, i) {return 10;})
+
+                    textLegend
+                        .attr("transform", function(d, i) {
+                            return "translate(" + (i * width / 20 + (width / 2.5) / 20 + ssift) + ",28)rotate(35)";
+                        })
+
+
+
+
+
+                    titlelegend.attr("x", 5)
+
+                    .attr("y", 18)
+                }
+                ///////////////////////////////////////////////////////////////////
+
+            } else {
+
+
+
+                var legend = svg.selectAll(".legend")
+                    .data(legenddata2)
+                    .enter().append("rect")
+                    .attr("class", "legend")
+                    .attr("fill", function(d) {
+                        return color(d.color)
+                    })
+
+
+                var textLegend = svg.selectAll(".legendtext")
+                    .data(legenddata2)
+                    .enter().append("text")
+                    .attr("class", "legendtext")
+
+                .text(function(d) {
+                    return d.Group
+                })
+
+                var titlelegend = svg.selectAll(".legendtitle")
+                    .data(["Risk of Automation"])
+                    .enter().append("text")
+                    .attr("class", "legendtitle")
+                    .style("font-weight", "bold")
+                    .text("Risk of Automation :")
+
+                ////////////////////////////////////////////////////////
+                if ($(window).width() > 992) {
+
+                    legend
+                        .attr("x", function(d, i) {
+                            return 15;
+                        })
+                        .attr("y", function(d, i) {
+                            return height - 160 + +i * 20;
+                        })
+                        .attr("width", 10)
+                        .attr("height", 20)
+
+                    textLegend.attr("x", function(d, i) {
+                            return 30;
+                        })
+                        .attr("y", function(d, i) {
+                            return height - 160 + 15 + i * 20;
+                        })
+                        //.style("font-size", '14px')
+
+                    titlelegend.attr("x", 15)
+                        //.style("font-size", "14px")
+                        .attr("y", height - 200)
+
+
+                } else {
+                    legend
+                        .attr("width", width / 20)
+                        .attr("height", 10)
+                        .attr("x", function(d, i) {
+                            return 0 + i * width / 20 + 100;
+                        })
+                        .attr("y", function(d, i) {
+                            return 10;
+                        })
+
+                    textLegend
+                        .attr("transform", function(d, i) {
+                            return "translate(" + (i * width / 20 + (width / 2.5) / 20 + 100) + ",28)rotate(35)";
+                        })
+                        //.style("font-size", "7px")
+
+
+
+
+                    titlelegend.attr("x", 5)
+                        //.style("font-size", "10px")
+                        .attr("y", 18)
+                }
+
+
+            }
+        }
+        ///////////////////////////////////////////////////////////////////////////////////
+
+        if ($(window).width() > 992) {
+
+            var startx = 50
+            var barh = 0
+            var barw = 0
+            var barfont = 0
+        } else {
+
+            var startx = 10
+            var barh = 0
+            var barw = 0
+            var barfont = 0
+        }
+
+        var width = $("#graph1").width()
+            //var height = $("#graph1").height()
+        var height = ($(window).height() / 2) * 0.8
+        var xscale = d3.scale.linear().domain([-10, 21]).range([startx, width])
+        var yscale = d3.scale.linear().domain([-1, 25]).range([0, height])
+
+        var iconobjs = [ 
+            {key:'abilities' , icon:'fa-trophy'},
+            {key:'interest', icon:'fa-eye'},
+            {key:'knowledge', icon:'fa-graduation-cap'},
+            {key:'skills', icon:'fa-rocket'},
+            {key:'workactivity', icon:'fa-cogs'},
+            {key:'workcontext', icon:'fa-cogs'},
+            {key:'workstyle', icon:'fa-cogs'},
+            {key:'workvalue', icon:'fa-cogs'}
+        ];
+                
+        // create tooltip
+        var tip = d3.tip()
+            .attr('class', 'd3-tip')
+            .offset([-10, 0])
+            .html(function (d) {
+                icon="none";
+                for (i = 0; i < iconobjs.length; i++) {
+                    if(iconobjs[i].key==d.group.replace(/\s+/g, '')){
+                        icon=iconobjs[i].icon;
+                    }
+                }
+                risk=d.p_auto.toString();
+                styles="padding-bottom:2px;vertical-align:middle;color:"+d.scolor;
+                return "&ensp;<i class='fa "+icon+" fa-2x' style="+styles+"></i>&ensp;<strong  style='color:black'>" + d.group.toUpperCase()+"</strong'>" 
+                        +"<br><pre>&ensp;"+d.name.toUpperCase()+"</pre>"
+                        +"<strong style='color:black'>&ensp;RCA : "+d.rca.substring(0, 6) 
+                        +"<br>&ensp;Complexity : "+d.complexity.substring(0, 6)
+                        +"<br>&ensp;Risk of Automation : "+risk.substring(0, 6)
+                        +"</strong>";
+            });
+
+        
+        var svg1 = d3.select("#graph1").append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .style("background-color", "#ffffff")
+            .style("border-radius","2px")
+            .style("border","solid 1px #aaa");
+        svg1.call(tip);    
+            
+        var svg2 = d3.select("#graph2").append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .style("background-color", "#ffffff")
+            .style("border-radius","2px")
+            .style("border","solid 1px #aaa");
+        svg2.call(tip);
+
+        var svglengend = d3.select("#graph2").append("svg")
+            .attr("width", width)
+            .attr("height", 80)
+            .attr('id', 'svglengend');
+
+        function dragstart(d) {
+            d3.select(this).classed("fixed", d.fixed = true);
+        }
+        ///////////////////////////////////////////////////
+
+        //toggle button code
+        colorDomain = [0.37, 0.52, 0.67], //[min,max]
+            colorRange = ["#2c25fb", '#eeeeee', "#ff3333"] //["0000ff", "#ffffff", "#ff0000"]
+
+        var color = d3.scale.linear()
+            .domain(colorDomain)
+            .range(colorRange);
+
+        var on = 1;
+
+        $(document).on('click', '.toggle-button', function() {
+
+
+            if (on) {
+                on = 0;
+            } else {
+                on = 1;
+            }
+
+            $(this).toggleClass('toggle-button-selected');
+
+            d3.json("json files/" + $('#dropdownmenu1').val() + ".json", function(error, graph) {
+                update(graph, "cityname1", "description1", svg1);
+            });
+
+            d3.json("json files/" + $('#dropdownmenu2').val() + ".json", function(error, graph) {
+                update(graph, "cityname2", "description2", svg2);
+            });
+        });
+
+        ////////////////////////////////////////////////////////////////////////////////
+
+        function drawnetwork(graph, selector, selector2, selector3, svg) {
+            var force = d3.layout.force()
+                .linkDistance(1)
+                .linkStrength(1)
+                .size([width, height]);
+
+            var drag = force.drag()
+                .on("dragstart", dragstart);
+
+            //svg.selectAll(".link").remove()
+            svg.selectAll(".node").remove()
+            svg.selectAll(".tooltip").remove()
+
+            var div = d3.select("body").append("div")
+                .attr("class", "tooltip")
+                .style("opacity", 0);
+
+            $(selector2).text(graph.city_name);
+            //$(selector3).text(graph.description)
+            //               .attr("text-align","left");
+
+            var nodes = graph.nodes.slice(),
+                links = [],
+                bilinks = [];
+
+            graph.links.forEach(function(link) {
+                var s = nodes[link.source],
+                    t = nodes[link.target],
+                    i = {}; // intermediate node
+                nodes.push(i);
+                links.push({
+                    source: s,
+                    target: i
+                }, {
+                    source: i,
+                    target: t
+                });
+                bilinks.push([s, i, t]);
+            });
+
+            force
+                .nodes(nodes)
+                .links(links)
+                .start();
+
+            var link = svg.selectAll(".link")
+                .data(bilinks)
+                .enter().append("line")
+                .attr("class", "link")
+                .attr('x1', function(d) {
+                    return xscale(+d[0].cx)
+                })
+                .attr('x2', function(d) {
+                    return xscale(+d[2].cx)
+                })
+                .attr('y1', function(d) {
+                    return yscale(+d[0].cy)
+                })
+                .attr('y2', function(d) {
+                    return yscale(+d[2].cy)
+                });
+
+            var node = svg.selectAll(".node")
+                .data(graph.nodes)
+                .enter().append("circle")
+                .attr("class", "node")
+                .attr("r", function(d) {
+                    return Math.min(30, Math.max(3, (+d.rca - 0.956) / (1.08 - 0.956) * 10)) * scalesize;
+                    //return generateradiussize(+d.rca);
+                })
+                .attr("cx", function(d) {
+                    return xscale(+d.cx)
+                })
+                .attr("cy", function(d) {
+                    return yscale(+d.cy)
+                })
+                //.attr("fixed", true)
+                .style("fill", function(d) {
+                    return d.scolor
+                })
+                .on('mouseover', tip.show)
+                .on('mouseout', tip.hide)
+                .call(drag);
+
+
+            if (selector == "#graph2") {
+                definedlegend(svg)
+            }
+
+
+        };
+
+        ////////////////////////////////////////////////////////////////
+
+
+        function generatedropdown(data, selector, selector2, selector3, selector4, svg) {
+
+            var newdiv = d3.select(selector);
+            selector == '#sidemenu1' ? newdiv.html('<b>City 1: </b>') : newdiv.html('<b>City 2: </b>')
+
+            var select = newdiv
+                .append("select")
+                .attr('id', 'dropdownmenu' + selector.slice(-1))
+                .style("width", '190px')
+
+            select.selectAll("option")
+                .data(data)
+                .enter()
+                .append("option")
+                .attr("selected", function(d) {
+                    if (selector2 == "#graph2") {
+                        if (d.City_Code == "2") {
+                            return "selected";
+                        }
+                    }
+                })
+                .attr("value", function(d) {
+                    return d.City_Code;
+                })
+                .text(function(d) {
+                    return d.AREA_NAME;
+                });
+
+            select.on("change", function(d) {
+                var value = d3.select(this).property("value");
+                d3.json("json files/" + value + ".json", function(error, graph) {
+                    update(graph, selector3, selector4, svg);
+                });
+            });;
+
+            $(selector).append("&nbsp;&nbsp;&nbsp;&nbsp;");
+            var r = $("<button type='button' class='btn btn-default' id='random" + selector.slice(-1) + "'>Random</button>");
+            $(selector).append(r);
+
+            if (selector == "#sidemenu1") {
+                //$(selector).append("<b>&nbsp;&nbsp;&nbsp;&nbsp;Risk of Automation : </b>");
+                //$(selector).append($("<span class='toggle-button' id='toggle1\'><input type='checkbox' //id='toggle-one' data-toggle='toggle' data-size='small' class-'teste'></span>"));
+            }
+
+            document.getElementById('random' + selector.slice(-1)).onclick = function() {
+
+                var randomCategorieIndex = Math.floor(Math.random() * data.length)
+                var randomCategorie = data[randomCategorieIndex]
+                var idname = '#dropdownmenu' + selector.slice(-1)
+
+                // update catefories dropdown
+                $(idname).val(randomCategorie.City_Code)
+
+                d3.json("json files/" + randomCategorie.City_Code + ".json", function(error, graph) {
+                    update(graph, selector3, selector4, svg);
+                });
+
+            };
+        };
+
+        /////////////////////////////////////////////////////////////////
+
+        d3.csv("data_generating/bedoor_rca_cities.csv", function(error, data) {
+            generatedropdown(data, '#sidemenu1', '#graph1', '#cityname1', '#description1', svg1);
+            generatedropdown(data, '#sidemenu2', '#graph2', '#cityname2', '#description2', svg2);        
+        });
+    
+            
+        d3.json("json files/1.json", function(error, graph) {
+            drawnetwork(graph, '#graph1', '#cityname1', '#description1', svg1);
+        })
+
+        d3.json("json files/2.json", function(error, graph) {
+            drawnetwork(graph, '#graph2', '#cityname2', '#description2', svg2);
+        })
+
+        /////////////////////////////////////////////////////////////////
+        function generateradiussize(rca) {
+            if (rca <= 0.2589988343) {
+                return 1;
+            } else if (rca <= 0.5485674132) {
+                return 2.5;
+            } else if (rca <= 0.7081012255) {
+                return 4;
+            } else if (rca <= 0.8236051749) {
+                return 5.5;
+            } else if (rca <= 0.9320670719) {
+                return 7;
+            } else if (rca <= 1.0425610511) {
+                return 8.5;
+            } else if (rca <= 1.1751796521) {
+                return 10;
+            } else if (rca <= 1.3608859543) {
+                return 11.5;
+            } else if (rca <= 1.7132505599) {
+                return 13;
+            } else if (rca <= 19.6583007245) {
+                return 14.5;
+            }
+        };
+
+        ////////////////////////////////////////////////////////////////////////
+
+
+
+        function update(graph, selector, selector2, svg) {
+
+            $(selector).text(graph.city_name);
+            //$(selector2).text(graph.description)
+            //               .attr("text-align","left");
+
+            //remove old tooltip
+            svg.selectAll(".tooltip").remove()
+                // update new tooltip
+            var div = d3.select("body").append("div")
+                .attr("class", "tooltip")
+                .style("opacity", 0);
+
+
+            // read new data
+            var nodearray = graph.nodes;
+            var tempObject = {};
+            for (var i = 0; i < nodearray.length; ++i) {
+                tempObject[nodearray[i]['name']] = +nodearray[i]['rca'];
+            }
+
+            // update node size
+            var nodeupdate = svg.selectAll(".node");
+            nodeupdate
+                .transition()
+                .duration(750)
+                .attr("r", function(d) {
+                    return Math.min(30, Math.max(3, (tempObject[d.name] - 0.956) / (1.08 - 0.956) * 10)) * scalesize;
+                    //return generateradiussize(tempObject[d.name]);
+
+                });
+            // update tooltip
+           /* nodeupdate
+                .on("mouseover", function(d) {
+                    div.transition()
+                        .duration(200)
+                        .style("opacity", 0.9);
+                    div.html("<b>" + d.name + "</b>") //</br>RCA: " + tempObject[d.name])
+                        .style("left", (d3.event.pageX) + "px")
+                        .style("top", (d3.event.pageY - 28) + "px");
+                })
+                .on("mouseout", function(d) {
+                    div.transition()
+                        .duration(500)
+                        .style("opacity", 0);
+                });
+                
+            */    
+
+            //change if auto toggle selected
+            if (!on) {
+                nodeupdate
+                    .style("fill", function(d) {
+                        if (d.p_auto == -1) {
+                            return "#aaaaaa"
+                        } else {
+                            return color(d.p_auto);
+                        }
+                    })
+                definedlegend(svg2)
+            } else {
+                nodeupdate
+                    .style("fill", function(d) {
+                        return d.scolor;
+                    })
+                definedlegend(svg2)
+            }
+        }
+        </script>
+</body>
+
+</HTML>
