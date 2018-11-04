@@ -6,4 +6,6 @@ A D3.js data visualization Web App, showing how the skills affects your job traj
 
 [Skillscape Visualization](https://iveltondequeiroz.github.io/skillscape/index.html)
 
+password : ivelton
+
 ![skillscape](skillscape.PNG)

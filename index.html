@@ -92,7 +92,7 @@ var overlay;
 if(sessionStorage.authorized) {
 } else {
 	var checkPassword = function() {
-		if(document.getElementById("xpwd").value != "workforce") {
+		if(document.getElementById("xpwd").value != "ivelton") {
 			overlay.remove();
 			overlay = jQuery('<div id="overlay">Incorrect password. <input type="button" id="xtry" onClick="javascript:window.location.reload();" value="Try again?"/></div>');
 			overlay.appendTo(document.body);
